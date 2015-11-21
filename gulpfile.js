@@ -6,6 +6,8 @@ var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
+var jade = require('gulp-jade');
+var concat = require('gulp-concat');
 
 var paths = {
   sass: ['./scss/**/*.scss']
@@ -28,6 +30,31 @@ gulp.task('sass', function(done) {
 
 gulp.task('watch', function() {
   gulp.watch(paths.sass, ['sass']);
+});
+
+gulp.task("js:watch", function() {
+  watch("./app/**/*.js", function() {
+    gulp.run("js");
+  });
+});
+
+gulp.task("js", function() {
+  return gulp.src(["./app/*.js", "./app/**/*.js"])
+    .pipe(concat("app.js"))
+    .pipe(gulp.dest("./www/js/"));
+});
+
+gulp.task("html", function() {
+  return gulp.src("./app/app.jade")
+  .pipe(jade({}))
+  .pipe(rename("index.html"))
+  .pipe(gulp.dest("./www/"));
+});
+
+gulp.task("html:watch", function() {
+  watch("./app/**/*.jade", function() {
+    gulp.run("html");
+  });
 });
 
 gulp.task('install', ['git-check'], function() {

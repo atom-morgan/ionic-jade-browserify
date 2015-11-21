@@ -1,0 +1,27 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    meta(name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width")
+    meta(name="apple-mobile-web-app-capable" content="yes")
+
+    link(rel="apple-touch-icon" href="")
+    link(rel="apple-touch-icon" sizes="76x76" href="")
+    link(rel="apple-touch-icon" sizes="120x120" href="")
+    link(rel="apple-touch-icon" sizes="152x152" href="")
+
+    title Skeleton
+
+    link(href="lib/ionic/css/ionic.css" rel="stylesheet")
+    //-link(href="css/app.css" rel="stylesheet")
+
+    script(src="lib/ionic/js/ionic.bundle.js")
+    script(src="lib/ionic/js/angular/angular-resource.js")
+    script(src="cordova.js")
+    script(src="js/app.js")
+
+  body(ng-app="skeleton")
+    ion-nav-bar.bar-stable
+      ion-nav-back-button
+
+    ion-nav-view
