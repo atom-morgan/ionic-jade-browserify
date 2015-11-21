@@ -5,8 +5,10 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-//angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
-angular.module('skeleton', ['ionic', 'controllers.status', 'controllers.home', 'controllers.settings'])
+angular.module('skeleton', [
+  'ionic',
+  require("./sections/sections.js").name
+])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -22,51 +24,4 @@ angular.module('skeleton', ['ionic', 'controllers.status', 'controllers.home', '
       StatusBar.styleDefault();
     }
   });
-})
-
-.config(function($stateProvider, $urlRouterProvider) {
-
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
-  $stateProvider
-  .state("dashboard", {
-    url: "/dashboard",
-    abstract: true,
-    templateUrl: "templates/tabs.html"
-  })
-
-  .state("dashboard.status", {
-    url: "/status",
-    views: {
-      "dashboard-status": {
-        templateUrl: "templates/status.html",
-        controller: "StatusCtrl"
-      }
-    }
-  })
-
-  .state("dashboard.home", {
-    url: "/home",
-    views: {
-      "dashboard-home": {
-        templateUrl: "templates/home.html",
-        controller: "HomeCtrl"
-      }
-    }
-  })
-
-  .state("dashboard.settings", {
-    url: "/settings",
-    views: {
-      "dashboard-settings": {
-        templateUrl: "templates/settings.html",
-        controller: "SettingsCtrl"
-      }
-    }
-  });
-
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise("/dashboard/home");
 });

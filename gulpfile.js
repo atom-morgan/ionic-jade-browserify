@@ -7,16 +7,49 @@ var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
 var jade = require('gulp-jade');
+var jadeify = require('jadeify');
 var concat = require('gulp-concat');
+var browserify = require("browserify");
+var watchify = require("watchify");
+var watch = require("gulp-watch");
+var source = require("vinyl-source-stream");
+var buffer = require("vinyl-buffer");
+var sourcemaps = require("gulp-sourcemaps");
 
-var paths = {
-  sass: ['./scss/**/*.scss']
-};
+function browserifyBundler(setup) {
+  var opts = {
+    entries: [setup.input],
+    debug: true,
+    cache: {},
+    packageCache: {},
+    transform: [jadeify]
+    //transform: [jadeify, stringify]
+  };
+  var b = browserify(opts);
+  var w = watchify(b);
 
-gulp.task('default', ['sass']);
+  var sourceMapsOpts = {
+    loadMaps: true
+  };
 
-gulp.task('sass', function(done) {
-  gulp.src('./scss/ionic.app.scss')
+  function bundle() {
+    return w.bundle()
+    .on("error", gutil.log.bind(gutil, "Browserify Error"))
+    .pipe(source(setup.output))
+    .pipe(buffer())
+    .pipe(sourcemaps.init(sourceMapsOpts))
+    .pipe(sourcemaps.write("./"))
+    .pipe(gulp.dest(setup.dest));
+  }
+
+  w.on("update", bundle);
+  w.on("log", gutil.log);
+
+  return bundle;
+}
+
+gulp.task("sass", function() {
+  return gulp.src("./app/app.scss")
     .pipe(sass())
     .on('error', sass.logError)
     .pipe(gulp.dest('./www/css/'))
@@ -24,25 +57,28 @@ gulp.task('sass', function(done) {
       keepSpecialComments: 0
     }))
     .pipe(rename({ extname: '.min.css' }))
-    .pipe(gulp.dest('./www/css/'))
-    .on('end', done);
+    .pipe(gulp.dest('./www/css/'));
 });
 
-gulp.task('watch', function() {
-  gulp.watch(paths.sass, ['sass']);
-});
-
-gulp.task("js:watch", function() {
-  watch("./app/**/*.js", function() {
-    gulp.run("js");
+gulp.task("sass:watch", function() {
+  watch("./app/*.scss", function() {
+    gulp.src("./app/app.scss")
+    .pipe(sass())
+    .pipe(gulp.dest("./www/css/"));
   });
-});
+}); 
 
 gulp.task("js", function() {
   return gulp.src(["./app/*.js", "./app/**/*.js"])
     .pipe(concat("app.js"))
     .pipe(gulp.dest("./www/js/"));
 });
+
+gulp.task("js:watch", browserifyBundler({
+  input: "./app/app.js",
+  output: "app.js",
+  dest: "www/js/"
+}));
 
 gulp.task("html", function() {
   return gulp.src("./app/app.jade")
@@ -56,6 +92,8 @@ gulp.task("html:watch", function() {
     gulp.run("html");
   });
 });
+
+gulp.task("watch", ["html:watch", "js:watch", "sass:watch"]);
 
 gulp.task('install', ['git-check'], function() {
   return bower.commands.install()
