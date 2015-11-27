@@ -1,14 +1,13 @@
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var bower = require('bower');
-var concat = require('gulp-concat');
-var sass = require('gulp-sass');
-var minifyCss = require('gulp-minify-css');
-var rename = require('gulp-rename');
-var sh = require('shelljs');
-var jade = require('gulp-jade');
-var jadeify = require('jadeify');
-var concat = require('gulp-concat');
+var gulp = require("gulp");
+var gutil = require("gulp-util");
+var bower = require("bower");
+var concat = require("gulp-concat");
+var sass = require("gulp-sass");
+var minifyCss = require("gulp-minify-css");
+var rename = require("gulp-rename");
+var sh = require("shelljs");
+var jade = require("gulp-jade");
+var jadeify = require("jadeify");
 var browserify = require("browserify");
 var watchify = require("watchify");
 var watch = require("gulp-watch");
@@ -25,7 +24,6 @@ function browserifyBundler(setup) {
     cache: {},
     packageCache: {},
     transform: [jadeify]
-    //transform: [jadeify, stringify]
   };
   var b = browserify(opts);
   var w = watchify(b);
@@ -48,18 +46,18 @@ function browserifyBundler(setup) {
   w.on("log", gutil.log);
 
   return bundle;
-}
+};
 
 gulp.task("sass", function() {
   return gulp.src("./app/app.scss")
     .pipe(sass())
-    .on('error', sass.logError)
-    .pipe(gulp.dest('./www/css/'))
+    .on("error", sass.logError)
+    .pipe(gulp.dest("./www/css/"))
     .pipe(minifyCss({
       keepSpecialComments: 0
     }))
-    .pipe(rename({ extname: '.min.css' }))
-    .pipe(gulp.dest('./www/css/'));
+    .pipe(rename({ extname: ".min.css" }))
+    .pipe(gulp.dest("./www/css/"));
 });
 
 gulp.task("sass:watch", function() {
@@ -68,7 +66,7 @@ gulp.task("sass:watch", function() {
     .pipe(sass())
     .pipe(gulp.dest("./www/css/"));
   });
-}); 
+});
 
 gulp.task("js", function() {
   return gulp.src(["./app/*.js", "./app/**/*.js"])
@@ -113,20 +111,20 @@ gulp.task("protractor", function() {
   .on("error", function(e) { throw e; });
 });
 
-gulp.task('install', ['git-check'], function() {
+gulp.task("install", ["git-check"], function() {
   return bower.commands.install()
-    .on('log', function(data) {
-      gutil.log('bower', gutil.colors.cyan(data.id), data.message);
+    .on("log", function(data) {
+      gutil.log("bower", gutil.colors.cyan(data.id), data.message);
     });
 });
 
-gulp.task('git-check', function(done) {
-  if (!sh.which('git')) {
+gulp.task("git-check", function(done) {
+  if (!sh.which("git")) {
     console.log(
-      '  ' + gutil.colors.red('Git is not installed.'),
-      '\n  Git, the version control system, is required to download Ionic.',
-      '\n  Download git here:', gutil.colors.cyan('http://git-scm.com/downloads') + '.',
-      '\n  Once git is installed, run \'' + gutil.colors.cyan('gulp install') + '\' again.'
+      "  " + gutil.colors.red("Git is not installed."),
+      "\n  Git, the version control system, is required to download Ionic.",
+      "\n  Download git here:", gutil.colors.cyan("http://git-scm.com/downloads") + ".",
+      "\n  Once git is installed, run \"" + gutil.colors.cyan("gulp install") + "\" again."
     );
     process.exit(1);
   }

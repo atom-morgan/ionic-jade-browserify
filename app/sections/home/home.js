@@ -1,4 +1,4 @@
-module.exports = angular.module('controllers.home', [])
+module.exports = angular.module("controllers.home", [])
 .controller("HomeCtrl", function() {
   var vm = this;
   vm.title = "Home";

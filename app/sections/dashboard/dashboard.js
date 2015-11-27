@@ -1,4 +1,4 @@
-module.exports = angular.module('controllers.dashboard', [])
+module.exports = angular.module("controllers.dashboard", [])
 .controller("DashboardCtrl", function() {
   var vm = this;
 })

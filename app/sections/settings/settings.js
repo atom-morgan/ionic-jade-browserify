@@ -1,4 +1,4 @@
-module.exports = angular.module('controllers.settings', [])
+module.exports = angular.module("controllers.settings", [])
 .controller("SettingsCtrl", function() {
   var vm = this;
   vm.title = "Settings";

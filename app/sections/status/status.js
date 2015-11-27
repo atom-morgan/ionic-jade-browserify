@@ -1,4 +1,4 @@
-module.exports = angular.module('controllers.status', [])
+module.exports = angular.module("controllers.status", [])
 .controller("StatusCtrl", function() {
   var vm = this;
   vm.title = "Status";

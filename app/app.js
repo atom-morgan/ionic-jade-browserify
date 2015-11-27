@@ -5,8 +5,8 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('skeleton', [
-  'ionic',
+angular.module("skeleton", [
+  "ionic",
   require("./sections/sections.js").name
 ])
 
