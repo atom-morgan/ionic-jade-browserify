@@ -15,6 +15,8 @@ var watch = require("gulp-watch");
 var source = require("vinyl-source-stream");
 var buffer = require("vinyl-buffer");
 var sourcemaps = require("gulp-sourcemaps");
+var KarmaServer = require("karma").Server;
+var protractor = require("gulp-protractor").protractor;
 
 function browserifyBundler(setup) {
   var opts = {
@@ -94,6 +96,22 @@ gulp.task("html:watch", function() {
 });
 
 gulp.task("watch", ["html:watch", "js:watch", "sass:watch"]);
+
+gulp.task("karma", function (done) {
+  new KarmaServer({
+    configFile: __dirname + "/karma.conf.js",
+    singleRun: false
+  }, done).start();
+});
+
+gulp.task("protractor", function() {
+  return gulp.src(["app/**/*.e2e.js"])
+  .pipe(protractor({
+    configFile: "protractor.conf.js",
+    args: ["--baseUrl", "http://127.0.0.1:8000"]
+  }))
+  .on("error", function(e) { throw e; });
+});
 
 gulp.task('install', ['git-check'], function() {
   return bower.commands.install()

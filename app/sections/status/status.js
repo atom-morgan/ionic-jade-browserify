@@ -1,6 +1,7 @@
 module.exports = angular.module('controllers.status', [])
-.controller("StatusCtrl", function($scope) {
-  console.log("Status Ctrl!");
+.controller("StatusCtrl", function() {
+  var vm = this;
+  vm.title = "Status";
 })
 .config(function($stateProvider) {
   $stateProvider.state("dashboard.status", {
@@ -8,7 +9,7 @@ module.exports = angular.module('controllers.status', [])
     views: {
       "dashboard-status": {
         template: require("./status.jade"),
-        controller: "StatusCtrl"
+        controller: "StatusCtrl as vm"
       }
     }
   });

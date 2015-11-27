@@ -1,6 +1,7 @@
 module.exports = angular.module('controllers.home', [])
-.controller("HomeCtrl", function($scope) {
-  console.log("Home Ctrl!");
+.controller("HomeCtrl", function() {
+  var vm = this;
+  vm.title = "Home";
 })
 .config(function($stateProvider) {
   $stateProvider.state("dashboard.home", {
@@ -8,7 +9,7 @@ module.exports = angular.module('controllers.home', [])
     views: {
       "dashboard-home": {
         template: require("./home.jade"),
-        controller: "HomeCtrl"
+        controller: "HomeCtrl as vm"
       }
     }
   });
